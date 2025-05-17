@@ -19,36 +19,37 @@ You are given an n x n grid representing a field of cherries, each cell is one o
 # Developed by: Sandhya B N
 # Register Number: 212222040144
 
-class Solution(object):
+class Solution:
     def cherryPickup(self, grid):
-        ROW_NUM = len(grid)
-        COL_NUM = len(grid[0])
-        dp = [[[float('-inf')] * COL_NUM for _ in range(COL_NUM)] for _ in range(ROW_NUM)]
-        dp[0][0][COL_NUM - 1] = grid[0][0] + grid[0][COL_NUM - 1]
-        for i in range(1, ROW_NUM):
-            for j1 in range(COL_NUM):
-                for j2 in range(COL_NUM):
-                    curr_cherries = grid[i][j1]
-                    if j1 != j2:
-                        curr_cherries += grid[i][j2]
-                    for prev_j1 in range(j1 - 1, j1 + 2):
-                        for prev_j2 in range(j2 - 1, j2 + 2):
-                            if 0 <= prev_j1 < COL_NUM and 0 <= prev_j2 < COL_NUM:
-                                prev_cherries = dp[i - 1][prev_j1][prev_j2]
-                                dp[i][j1][j2] = max(dp[i][j1][j2], curr_cherries + prev_cherries)
-        
-        return max(0, dp[ROW_NUM - 1][0][COL_NUM - 1])
-
-# Example usage
-grid = [[3,1,1],
-        [2,5,1],
-        [1,5,5],
-        [2,1,1]]
-ob = Solution()
-print(ob.cherryPickup(grid))
+        n = len(grid)
+        ### add code here
+        dp=[[[-1]*n for _ in range(n)] for _ in range(n)]
+        def f(x1,y1,x2):
+            y2=x1+y1-x2
+            if x1<0 or y1<0 or x2<0 or y2<0 or grid[x1][y1]==-1 or grid[x2][y2]==-1:
+                return float('-inf')
+            if x1==0 and y1==0 and x2==0 and y2==0:
+                return grid[0][0]
+            if dp[x1][y1][x2]!=-1:
+                return dp[x1][y1][x2]
+            cherries=grid[x1][y1]
+            if x1!=x2 or y1!=y2:
+                cherries+=grid[x2][y2]
+            cherries+=max(
+                          f(x1-1,y1,x2-1),
+                           f(x1,y1-1,x2-1),
+                           f(x1-1,y1,x2),
+                           f(x1,y1-1,x2))
+            dp[x1][y1][x2]=cherries
+            return cherries
+        result= max(0,f(n-1,n-1,n-1))
+        return result
+obj=Solution()
+grid=[[0,1,-1],[1,0,-1],[1,1,1]]        
+print(obj.cherryPickup(grid))
 ```
 ## Output:
-<img width="566" alt="image" src="https://github.com/user-attachments/assets/e8437204-e0a5-4401-b019-bf11b7819f1b" />
+![image](https://github.com/user-attachments/assets/de7e43da-3cbb-4901-ac25-9f8a1d46dfff)
 
 
 
