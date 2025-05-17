@@ -1,6 +1,6 @@
 # EX 6B KNAPSACK PROBLEM  
 ## DATE:  
-*Enter the date here*  
+
 
 ## AIM:  
 To demonstrate a Python program using dynamic programming for the 0/1 knapsack problem.  
